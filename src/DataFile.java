@@ -3,7 +3,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.io.*;
 
-class DataFile{
+public class DataFile{
 
   String fileName;
   List<String> fileContent;
@@ -28,8 +28,6 @@ class DataFile{
     }
     System.out.println(String.format("Successfully read file %s and loaded contents!",fileName));
     return lines;
-    
   }
-
-  
 }
+

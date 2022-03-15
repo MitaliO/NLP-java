@@ -1,26 +1,31 @@
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.*;
-import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-  
-class Preprocessing{
 
-  //String dataPath = "/home/runner/HilariousHotElements/data/";
-  String dataPath = "/home/runner/HilariousHotElements/data/test/";
-  HashSet<String> stopwords = loadStopwords();
+import edu.stanford.nlp.ling.*;
+import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.util.StringUtils;
+
+import java.util.*;
+
   
-  ArrayList<DataFile> data = removeStopWords(readAllData(dataPath));
+public class Preprocessing{
+
+  //String dataPath = "/Users/mitali/eclipse-workspace/BDS-JAVA_Eclipse/src/data/test";
+	String dataPath = "/Users/mitali/eclipse-workspace/BDS-JAVA_Eclipse/src/data/C1";
+	HashSet<String> stopwords = loadStopwords();
+  
+	ArrayList<DataFile> data = removeStopWords(readAllData(dataPath));
+	ArrayList<DataFile> lemmatizedData = lemmatizer(data);
+   
   
   public HashSet<String> loadStopwords(){
     List<String> stopwords = new ArrayList<String>();
     HashSet<String> stopwordsSet = new HashSet<String>();
     try{
-      stopwords = Files.readAllLines(Paths.get("English-stopwords.txt"));
+      stopwords = Files.readAllLines(Paths.get("/Users/mitali/eclipse-workspace/BDS-JAVA_Eclipse/src/English-stopwords.txt"));
       stopwordsSet.addAll(stopwords);
     } catch(Exception e){
       System.out.println(e);
@@ -80,6 +85,18 @@ class Preprocessing{
     return result.toString();
     
   }
-}
   
-
+  public static ArrayList<DataFile> lemmatizer(ArrayList<DataFile> originalData) {
+	  
+	  StanfordLemmatizer slem = new StanfordLemmatizer();
+	  
+	  //System.out.println(slem.lemmatize(text));
+	  for(DataFile df : originalData){
+		  List<String> builder = slem.lemmatize(StringUtils.join(df.fileContent," "));
+		  df.fileContent = builder;
+	  }
+	  return originalData;
+	  }
+ 
+  
+}
